@@ -82,14 +82,19 @@ export async function GET(req: Request) {
       }
     }
 
+    // FIX: Use the base URL from env vars to construct clean redirect
+    const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || 'http://localhost:3000';
     const redirectGroupId = data.data?.metadata?.group_id;
+    
+    let redirectUrl: string;
     if (redirectGroupId) {
-      console.log(`Redirecting to: /groups/${redirectGroupId}`);
-      return NextResponse.redirect(new URL(`/groups/${redirectGroupId}`, req.url));
+      redirectUrl = `${baseUrl}/groups/${redirectGroupId}`;
+    } else {
+      redirectUrl = `${baseUrl}/`;
     }
     
-    console.log('Redirecting to: /');
-    return NextResponse.redirect(new URL('/', req.url));
+    console.log(`Redirecting to: ${redirectUrl}`);
+    return NextResponse.redirect(redirectUrl);
     
   } catch (err) {
     console.error('❌ Verification error:', err);
