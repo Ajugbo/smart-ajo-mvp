@@ -55,16 +55,17 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // ✅ FIX: Don't spread state directly - destructure it
+  const contextValue: SessionContextValue = {
+    userId: state.userId,
+    name: state.name,
+    role: state.role,
+    ready,
+    setSession,
+    clearSession,
+  };
+
   return (
-    <SessionContext.Provider value={{
-      userId: state.userId,
-      name: state.name,
-      role: state.role,
-      ready,
-      setSession,
-      clearSession
-    }}>
+    <SessionContext.Provider value={contextValue}>
       {children}
     </SessionContext.Provider>
   );
